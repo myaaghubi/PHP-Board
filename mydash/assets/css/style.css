@@ -1,0 +1,81 @@
+/*!
+ * 
+ * 
+ * 
+ */
+
+body {
+    padding-top: 70px;
+}
+
+.margin-b {
+    margin-bottom: 30px;
+}
+
+footer {
+    margin: 50px 0;
+}
+
+.navbar-inverse {
+	background-color:#37474f
+}
+
+.webs , .files{
+	position: relative;
+	text-align: center;
+	font-size:13px;
+}
+
+.files {
+
+	font-size:12px;
+}
+
+.webs a ,.files a {
+	display:inline-block;
+	text-align: center;
+	color:#37474f;
+	text-decoration: none;
+}
+
+.open-explorer {
+	position: absolute;
+	right:10px;
+	top: 10px;
+}
+.open-explorer img{
+	width:30px;
+	height: 30px;
+}
+
+.webs img {
+}
+
+#websContextMenu, #filesContextMenu {
+  position: absolute;
+  display:none;
+}
+
+
+.files, .files div{
+	overflow: hidden;
+}
+.col-xxs-3,.col-xxs-4, .col-xxs-6 {
+  position:relative;
+  min-height:1px;
+}
+
+.col-xxs-3,.col-xxs-4,.col-xxxs-6 { 
+  float:left;
+}
+
+@media screen and (max-width: 500px) {
+	.col-xxs-3 { width:25%; }
+	.col-xxs-4 { width:33.33333333%; }
+}
+
+@media screen and (max-width: 350px) {
+	.col-xxxs-6 { width:50%; }
+	.webs, .files { font-size:11px; }
+}
+
