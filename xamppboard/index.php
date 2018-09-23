@@ -9,7 +9,7 @@
 	<meta name="description" content="Simple dashboard for XAMPP">
 	<meta name="author" content="Mohammad Yaghobi">
 
-	<title>MyDash - Simple Dashboard for XAMPP</title>
+	<title>XAMPP Board - Simple Dashboard for XAMPP</title>
 
 	<!-- Bootstrap Core CSS -->
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -37,7 +37,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">MyDash</a>
+				<a class="navbar-brand" href="#">XAMPP Board</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -60,12 +60,12 @@
 	$files_list = "";
 	if ($handle = opendir('..')) {
 		while (false !== ($entry = readdir($handle))) {
-			if ($entry != "." && $entry != ".." && $entry != "xampp" && $entry != "dashboard" && $entry != "mydash") {
+			if ($entry != "." && $entry != ".." && $entry != "xampp" && $entry != "dashboard" && $entry != "xamppboard") {
 				if (is_dir(dirname(__FILE__, 2).'\\'.$entry))
 					$dirs_list .= '
 				<div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 col-xxs-4 col-xxxs-6 margin-b webs">
 				<a target="_blank" href="/'.$entry.'" data-href="'.$entry.'">
-				<img class="img-responsive" style="padding:0 10px 3px 10px" src="assets/images/webs2.png" data-href="'.$entry.'">
+				<img class="img-responsive" src="assets/images/webs2.png" data-href="'.$entry.'">
 				</a><br>
 				<a href="/'.$entry.'" data-href="'.$entry.'">
 				'.$entry.'
@@ -95,17 +95,18 @@
 		<div class="row">
 
 			<div class="col-lg-12">
-				<h1 class="page-header">Your htdocs</h1>
+				<h1 class="page-header">Your htdocs <br><span class="details"><?php print apache_get_version(); ?></h1>
+
 			</div>
 			<?php 
-			echo $dirs_list;
+			print $dirs_list;
 			?>
 
 		</div>
 
 		<?php 
 		if ($files_list!='') {
-			echo '
+			print '
 			<div class="row">'
 			.$files_list.'
 			</div>';
@@ -117,7 +118,7 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; <a href="https://github.com/myaghobi/mydash">MyDash</a> <?php print date("Y"); ?>.</p>
+        <p class="m-0 text-center text-white">Copyright &copy; <?php print date("Y"); ?>, <a href="https://github.com/myaghobi/xamppboard">XAMPP Board</a></p>
       </div>
       <!-- /.container -->
     </footer>
@@ -145,6 +146,8 @@
 	<!-- jQuery -->
 	<script src="assets/js/jquery.js"></script>
 
+	<!-- Bootstrap Core JavaScript -->
+	<script src="assets/js/bootstrap.min.js"></script>
 	<script>
 		<?php
 		echo 'var baseDir = "'.addslashes(dirname(__FILE__, 2)).'";';

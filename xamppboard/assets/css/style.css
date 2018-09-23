@@ -56,6 +56,11 @@ footer {
   display:none;
 }
 
+.details {
+	font-size: 14px;
+	color:#999;
+}
+
 
 .files, .files div{
 	overflow: hidden;
@@ -67,6 +72,29 @@ footer {
 
 .col-xxs-3,.col-xxs-4,.col-xxxs-6 { 
   float:left;
+}
+
+.col-lg-2 a img { padding: 0px 10px 3px 10px; }
+
+@media screen and (min-width: 1200px) {
+	.col-md-2 a img { padding: 7px 17px 3px 17px; }
+}
+
+@media screen and (max-width: 1199px) {
+	.col-md-2 a img { padding: 5px 15px 3px 15px; }
+}
+
+@media screen and (max-width: 991px) {
+	.col-md-2 a img { padding: 5px 15px 3px 15px; }
+}
+
+@media screen and (max-width: 765px) {
+	.page-header { margin-top: 0; }
+	footer { margin:0; }
+}
+
+@media screen and (max-width: 700px) {
+	.col-md-2 a img { padding:0px; }
 }
 
 @media screen and (max-width: 500px) {
