@@ -1,59 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php 
+	require("common/common.php");
 
-<head>
-
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Simple dashboard for XAMPP">
-	<meta name="author" content="Mohammad Yaghobi">
-
-	<title>XAMPP Board - Simple Dashboard for XAMPP</title>
-
-	<!-- Bootstrap Core CSS -->
-	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-
-	<!-- Custom CSS -->
-	<link href="assets/css/style.css" rel="stylesheet">
-
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-</head>
-
-<body>
-
-	<!-- Navigation -->
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">XAMPP Board</a>
-			</div>
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li>
-						<a href="/phpmyadmin" target="_black">PHPMyAdmin</a>
-					</li>
-					<li>
-						<a href="phpinfo.php">PHPInfo</a>
-					</li>
-				</ul>
-			</div>
-			<!-- /.navbar-collapse -->
-		</div>
-		<!-- /.container -->
-	</nav>
+	getHeader();
+?>
 
 	<?php
 	$dirs_list = "";
@@ -65,7 +14,7 @@
 					$dirs_list .= '
 				<div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 col-xxs-4 col-xxxs-6 margin-b webs">
 				<a target="_blank" href="/'.$entry.'" data-href="'.$entry.'">
-				<img class="img-responsive" src="assets/images/webs2.png" data-href="'.$entry.'">
+				<img class="img-responsive" src="theme/assets/images/webs2.png" data-href="'.$entry.'">
 				</a><br>
 				<a href="/'.$entry.'" data-href="'.$entry.'">
 				'.$entry.'
@@ -76,7 +25,7 @@
 				<div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-xxs-4 col-xxxs-6 margin-b files">
 				<div target="_blank" href="/'.$entry.'">
 				<a href="/'.$entry.'" target="_blank">
-				<img class="img-responsive" src="assets/images/file.png"  data-href="'.$entry.'">
+				<img class="img-responsive" src="theme/assets/images/file.png"  data-href="'.$entry.'">
 				</a><br>
 				<a href="/'.$entry.'" target="_blank" data-href="'.$entry.'">
 				'.$entry.'
@@ -115,16 +64,6 @@
 	</div>
 	<!-- /.container -->
 
-    <!-- Footer -->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; <?php print date("Y"); ?>, <a href="https://github.com/myaghobi/xamppboard">XAMPP Board</a></p>
-      </div>
-      <!-- /.container -->
-    </footer>
-
-
-
 
 	<div id="websContextMenu" class="dropdown clearfix">
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
@@ -140,14 +79,6 @@
 		</ul>
 	</div>
 
-
-
-
-	<!-- jQuery -->
-	<script src="assets/js/jquery.js"></script>
-
-	<!-- Bootstrap Core JavaScript -->
-	<script src="assets/js/bootstrap.min.js"></script>
 	<script>
 		<?php
 		echo 'var baseDir = "'.addslashes(dirname(__FILE__, 2)).'";';
@@ -233,6 +164,7 @@
 			}
 		});
 	</script>
-</body>
 
-</html>
+<?php 
+	getFooter();
+?>
