@@ -1,4 +1,4 @@
-# XAMPP Board 0.3.1
+# XAMPP Board 0.3.3
 Simple dashboard for XAMPP.
 
 Usage
