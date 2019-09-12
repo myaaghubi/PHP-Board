@@ -6,15 +6,15 @@
       <!-- /.container -->
     </footer>
 
-  <?php 
+    <?php
     if (!empty($jsList)) {
       if (is_array($jsList))
         foreach ($jsList as $item) {
-          print '<script src="theme/assets/js/'.$item.'.js"></script>';
-        }
-      else
-        print '<script src="theme/assets/js/'.$item.'.js"></script>';
+          print '<script src="theme/assets/js/' . $item . '.js"></script>';
+        } else
+        print '<script src="theme/assets/js/' . $item . '.js"></script>';
     }
-  ?>
+    ?>
 </body>
+
 </html>

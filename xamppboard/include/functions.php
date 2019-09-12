@@ -28,7 +28,7 @@ function getUserConfigParameters() {
 
 function saveUserConfig($path, $specificKeysTemp) {
     if (!file_exists($path)) {
-        return false;
+        return "error";
     }
 
     // var_dump($specificKeysTemp);
@@ -66,5 +66,6 @@ function saveUserConfig($path, $specificKeysTemp) {
     // var_dump($specificKeysTemp);
 
     file_put_contents($path, $fileFinal);
+    return "done";
     // var_dump($fileFinal);
 }
