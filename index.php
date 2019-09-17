@@ -7,7 +7,7 @@
 	$uri .= $_SERVER['HTTP_HOST'];
 	// header('Location: '.$uri.'/dashboard/'); // *, uncomment * lines to get classic dashboard!
 	// exit; // *
-	header('Location: '.$uri.'/xamppboard/');
+	header('Location: '.$uri.'/phpboard/');
 	exit;
 ?>
 Something is wrong with the XAMPP installation :-(
