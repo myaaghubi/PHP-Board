@@ -167,3 +167,25 @@ footer {
     width: 1.5rem;
     height: 1.5rem;
 }
+
+
+
+/* ---------------------------- */
+img.dir {
+    width:50px;
+    height:auto;
+    overflow: hidden;
+}
+
+.dangerHighlight {
+    background: #ffbbbb;
+}
+
+.highlightOut {
+    background-color: rgba(255, 255, 255, 0.0);
+    transition: background-color 1000ms linear;
+}
+
+.filestable td {
+    vertical-align: middle!important;
+}

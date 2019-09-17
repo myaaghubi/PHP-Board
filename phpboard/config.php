@@ -139,9 +139,7 @@ for ($i = 0; $i < count($specificKeys); $i++) {
             $http({
                 method: 'POST',
                 url: "phpconfig.php",
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 data: form.serialize()
             }).then(function successCallback(response) {
                 $timeout(function() {

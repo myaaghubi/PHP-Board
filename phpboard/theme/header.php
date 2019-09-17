@@ -58,13 +58,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="/">Apps</a>
+                        <a href="/">Files</a>
+                    </li>
+                    <li>
+                        <a href="config.php">Config</a>
                     </li>
                     <li>
                         <a href="/phpmyadmin">PHPMyAdmin</a>
-                    </li>
-                    <li>
-                        <a href="phpconfig.php">PHPConfig</a>
                     </li>
                     <li>
                         <a href="phpinfo.php">PHPInfo</a>
