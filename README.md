@@ -1,4 +1,4 @@
-# XAMPP Board 0.4.0
+# XAMPP Board 0.4.3
 A php dashboard for developers.
 
 Usage

@@ -8,11 +8,11 @@ ini_set('display_startup_errors', '1');
 // UTF-8 is necessary for basename()
 setlocale(LC_ALL, 'UTF-8');
 
-$sys_vesrion = "0.4.0";
+$sys_vesrion = "0.4.3";
 
-define('URL_ROOT',  rtrim($_SERVER['HTTP_HOST']).'/');
+define('URL_ROOT', rtrim($_SERVER['HTTP_HOST']).'/');
 // define('URL_PROJECT',  URL_ROOT.'xamppboard/');
-define('URL_PROJECT',  URL_ROOT.trimURL($_SERVER['REQUEST_URI']).DIRECTORY_SEPARATOR);
+define('URL_PROJECT', URL_ROOT.trimURL($_SERVER['REQUEST_URI']).DIRECTORY_SEPARATOR);
 define('DIR_ROOT', dirname(__FILE__, 3).DIRECTORY_SEPARATOR); // it's 3 if you placed this project in your root directory.
 
 // print "URL_ROOT > ".URL_ROOT."<br>";
@@ -22,8 +22,9 @@ define('DIR_ROOT', dirname(__FILE__, 3).DIRECTORY_SEPARATOR); // it's 3 if you p
 // print "$[REQUEST_URI] > ".$_SERVER['REQUEST_URI']."<br>";
 
 
-function trimURL($url) {
-    $i = strpos($url,'?d=' );
+function trimURL($url)
+{
+    $i = strpos($url, '?d=');
     if ($i>0) {
         $url = substr($url, 0, $i);
     }
@@ -31,4 +32,3 @@ function trimURL($url) {
     $url = trim($url, '/');
     return $url;
 }
-?>
