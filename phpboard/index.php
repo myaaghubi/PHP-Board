@@ -14,7 +14,14 @@ if (!empty($pData)) {
         } else {
             ajaxDone(false);
         }
-    } else { }
+    } else if ($act == 'zip') {
+        $path = $pData->path ?? '';
+        if (!empty($path) and file_exists(DIR_ROOT . $path)) {
+            ajaxDone(zipDir(DIR_ROOT . $path));
+        } else {
+            ajaxDone(false);
+        }
+    }
 
     ajaxInvalid();
 }
@@ -27,16 +34,30 @@ if (!empty($_GET['d'])) {
 }
 
 if (@$_GET['act'] == 'download') {
-    if ($_GET['file'] ?? false) {
-        $downloadfile = $_GET['file'];
-        if (file_exists(DIR_ROOT.$directory.$downloadfile)) {
-            header ("Content-Type:application/octet-stream");
-            header ("Accept-Ranges: bytes");
-            header ("Content-Length: ".filesize(DIR_ROOT.$directory.$file));
-            header ("Content-Disposition: attachment; filename=".$file);
-            readfile(DIR_ROOT.$directory.$file);
+    if ($_GET['targetf'] ?? false) {
+        $targetFile = $_GET['targetf'];
+        if (file_exists(DIR_ROOT . $directory . $targetFile)) {
+            header("Content-Type:application/octet-stream");
+            header("Accept-Ranges: bytes");
+            header("Content-Length: " . filesize(DIR_ROOT . $directory . $targetFile));
+            header("Content-Disposition: attachment; filename=" . $targetFile);
+            readfile(DIR_ROOT . $directory . $targetFile);
             exit;
         }
+    } else if ($_GET['targetd'] ?? false) {
+        $targetDir = $_GET['targetd'];
+        $zip = new ZipArchive;
+        $download = $targetDir . '.zip';
+        $zip->open($download, ZipArchive::CREATE);
+
+        addDirToZip($zip, $targetDir, DIR_ROOT . $directory . $targetDir);
+
+        $zip->close();
+        header('Content-Type: application/zip');
+        header("Content-Disposition: attachment; filename = $targetDir.zip");
+        header('Content-Length: ' . filesize($download));
+        header("Location: $download");
+        exit;
     }
     exit("<script>window.close()</script>");
 }
@@ -63,8 +84,8 @@ if ($files = array_diff(scandir(DIR_ROOT . $directory), ['.', '..'])) {
                     <td>' . date('M d, Y H:i', $stat['mtime']) . '</td>
                     <td>' . getPermDescription($path) . '</td>
                     <td>'
-                    . (true ? '<input type="button" ng-click="downloadDir($event, ' . $index . ')" value="download"> ' : ' ')
-                    . (is_writable($path) ? '<input type="button" ng-click="deleteFileDir($event, ' . $index . ')" value="delete"> ' : ' ') .
+                    . (true ? '<button type="button" class="btn btn-default btn-sm btn-dirtozip" ng-click="zipDir($event, ' . $index . ')">Create Zip File</button> ' : ' ')
+                    . (is_writable($path) ? '<input type="button" class="btn btn-danger btn-sm" ng-click="deleteFileDir($event, ' . $index . ')" value="Delete" title="Delete without confirmation!"> ' : ' ') .
                     '</td>
 				</tr>';
             } else {
@@ -78,8 +99,8 @@ if ($files = array_diff(scandir(DIR_ROOT . $directory), ['.', '..'])) {
                     <td>' . date('M d, Y H:i', $stat['mtime']) . '</td>
                     <td>' . getPermDescription($path) . '</td>
                     <td>'
-                    . (true ? '<input type="button" ng-click="downloadFile($event, ' . $index . ')" value="download"> ' : ' ')
-                    . (is_writable($path) ? '<input type="button" ng-click="deleteFileDir($event, ' . $index . ')" value="delete"> ' : ' ') .
+                    . (true ? '<input type="button" class="btn btn-default btn-sm" ng-click="downloadFile($event, ' . $index . ')" value="Download"> ' : ' ')
+                    . (is_writable($path) ? '<input type="button" class="btn btn-danger btn-sm" ng-click="deleteFileDir($event, ' . $index . ')" value="Delete"> ' : ' ') .
                     '</td>
                 </tr>';
             }
@@ -253,12 +274,49 @@ getHeader();
                 var path = trItem.attr("data-href");
                 var file = trItem.attr("data-file");
                 var url = window.location.href;
-                url+=(url.search('/?')>0?'&':'?');
+                url += (url.search('/?') > 0 ? '&' : '?');
 
-                var mw = $window.open(url+"act=download&file=", '_blank');
-                mw.blur();
-setTimeout($window.focus(), 0);
-$window.focus();
+                $window.open(url + "act=download&targetf=" + file, '_blank');
+                $window.focus();
+            }
+            $scope.zipDir = function(event, id) {
+                var zipBtn = angular.element(event.target);
+                zipBtn.html('<span class="spinner-grow spinner-grow-sm" style="margin:0 5px 0 -2px;" role="status" aria-hidden="true"></span> Zipping ...');
+                angular.element(".btn-dirtozip").attr("disabled", true);
+
+
+                var trItem = $element.find('#tr-' + id);
+                var path = trItem.attr("data-href");
+
+                $http({
+                    method: 'POST',
+                    url: "index.php",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    data: {
+                        act: 'zip',
+                        path: path
+                    }
+                }).then(function successCallback(response) {
+                    console.log(response.data);
+                    if (response.data.status === true) {
+                        zipBtn.html('Create Zip File');
+                        angular.element(".btn-dirtozip").attr("disabled", false);
+
+                        $timeout(function() {
+                            $window.location.reload();
+                        }, 250);
+                    } else {
+                        trItem.addClass("dangerHighlight");
+                        $timeout(function() {
+                            trItem.addClass("highlightOut");
+                        }, 1000);
+                    }
+
+                }, function errorCallback(response) {
+
+                });
             }
             $scope.deleteFileDir = function(event, id) {
                 var trItem = $element.find('#tr-' + id);
@@ -275,7 +333,6 @@ $window.focus();
                         path: path
                     }
                 }).then(function successCallback(response) {
-                    console.log(response.data);
                     if (response.data.status === true) {
                         trItem.hide(250);
                         $timeout(function() {

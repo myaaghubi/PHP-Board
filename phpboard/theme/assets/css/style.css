@@ -189,3 +189,7 @@ img.dir {
 .filestable td {
     vertical-align: middle!important;
 }
+
+button.btn-dirtozip {
+    width: 101px;
+}
