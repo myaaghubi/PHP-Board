@@ -9,21 +9,47 @@ if (!empty($pData)) {
     $act = $pData->act ?? '';
     if ($act == 'del') {
         $path = $pData->path ?? '';
-        if (!empty($path) and file_exists(DIR_ROOT . $path)) {
-            ajaxDone(removeDirFile(DIR_ROOT . $path));
+        if (!empty($path) and file_exists(PATH_ROOT . $path)) {
+            ajaxDone(removeDirFile(PATH_ROOT . $path));
         } else {
             ajaxDone(false);
         }
     } else if ($act == 'zip') {
         $path = $pData->path ?? '';
-        if (!empty($path) and file_exists(DIR_ROOT . $path)) {
-            ajaxDone(zipDir(DIR_ROOT . $path));
+        if (!empty($path) and file_exists(PATH_ROOT . $path)) {
+            ajaxDone(zipDir(PATH_ROOT . $path));
         } else {
             ajaxDone(false);
+        }
+    } else if ($act == 'addFile') {
+        $directory = $pData->dir ?? '';
+        $name = $pData->name ?? '';
+        if (empty($name)) {
+            ajaxDone(false, "File name is empty!");
+        } if (file_exists(PATH_ROOT . $directory .$name)) {
+            ajaxDone(false, "Duplicated file name!");
+        } else {
+            ajaxDone(fopen(PATH_ROOT . $directory .$name, "w")!==false);
+        }
+    } else if ($act == 'addFolder') {
+        $directory = $pData->dir ?? '';
+        $name = $pData->name ?? '';
+        if (empty($name)) {
+            ajaxDone(false, "Folder name is empty!");
+        } if (file_exists(PATH_ROOT . $directory .$name)) {
+            ajaxDone(false, "Duplicated folder name!");
+        } else {
+            ajaxDone(mkdir(PATH_ROOT . $directory .$name, 0777, true), "w");
         }
     }
 
     ajaxInvalid();
+} else if (isset($_POST['upload'])) {
+    $path = $_POST['path'];
+    foreach ($_FILES as $file) {
+        @move_uploaded_file($file["tmp_name"], PATH_ROOT . $path . $file["name"]);
+    }
+    ajaxDone(true);
 }
 
 
@@ -36,12 +62,12 @@ if (!empty($_GET['d'])) {
 if (@$_GET['act'] == 'download') {
     if ($_GET['targetf'] ?? false) {
         $targetFile = $_GET['targetf'];
-        if (file_exists(DIR_ROOT . $directory . $targetFile)) {
+        if (file_exists(PATH_ROOT . $directory . $targetFile)) {
             header("Content-Type:application/octet-stream");
             header("Accept-Ranges: bytes");
-            header("Content-Length: " . filesize(DIR_ROOT . $directory . $targetFile));
+            header("Content-Length: " . filesize(PATH_ROOT . $directory . $targetFile));
             header("Content-Disposition: attachment; filename=" . $targetFile);
-            readfile(DIR_ROOT . $directory . $targetFile);
+            readfile(PATH_ROOT . $directory . $targetFile);
             exit;
         }
     } else if ($_GET['targetd'] ?? false) {
@@ -50,7 +76,7 @@ if (@$_GET['act'] == 'download') {
         $download = $targetDir . '.zip';
         $zip->open($download, ZipArchive::CREATE);
 
-        addDirToZip($zip, $targetDir, DIR_ROOT . $directory . $targetDir);
+        addDirToZip($zip, $targetDir, PATH_ROOT . $directory . $targetDir);
 
         $zip->close();
         header('Content-Type: application/zip');
@@ -62,15 +88,16 @@ if (@$_GET['act'] == 'download') {
     exit("<script>window.close()</script>");
 }
 
-
+$isInProjectPath = strpos(PATH_PROJECT, PATH_ROOT . $directory) !== false && strlen($directory) > 0;
+$isInRootDir = PATH_ROOT . $directory == PATH_ROOT ? true : false;
 
 $dirs_list = "";
 $files_list = "";
-if ($files = array_diff(scandir(DIR_ROOT . $directory), ['.', '..'])) {
+if ($files = array_diff(scandir(PATH_ROOT . $directory), ['.', '..'])) {
     $index = 0;
     foreach ($files as $entry) {
         if ($entry != "." && $entry != "..") {
-            $path =  DIR_ROOT . $directory . $entry;
+            $path =  PATH_ROOT . $directory . $entry;
             // print decoct(fileperms($file) & 0777);
             $stat = stat($path);
             if (is_dir($path)) {
@@ -85,7 +112,7 @@ if ($files = array_diff(scandir(DIR_ROOT . $directory), ['.', '..'])) {
                     <td>' . getPermDescription($path) . '</td>
                     <td>'
                     . (true ? '<button type="button" class="btn btn-default btn-sm btn-dirtozip" ng-click="zipDir($event, ' . $index . ')">Create Zip File</button> ' : ' ')
-                    . (is_writable($path) ? '<input type="button" class="btn btn-danger btn-sm" ng-click="deleteFileDir($event, ' . $index . ')" value="Delete" title="Delete without confirmation!"> ' : ' ') .
+                    . makeDeleteButtonForDir($path, $entry, $index) .
                     '</td>
 				</tr>';
             } else {
@@ -100,7 +127,7 @@ if ($files = array_diff(scandir(DIR_ROOT . $directory), ['.', '..'])) {
                     <td>' . getPermDescription($path) . '</td>
                     <td>'
                     . (true ? '<input type="button" class="btn btn-default btn-sm" ng-click="downloadFile($event, ' . $index . ')" value="Download"> ' : ' ')
-                    . (is_writable($path) ? '<input type="button" class="btn btn-danger btn-sm" ng-click="deleteFileDir($event, ' . $index . ')" value="Delete"> ' : ' ') .
+                    . makeDeleteButtonForFile($path, $entry, $index) .
                     '</td>
                 </tr>';
             }
@@ -121,20 +148,54 @@ function getPermDescription($path)
     return implode('+', $desc);
 }
 
+function makeDeleteButtonForDir($path, $entry, $index)
+{
+    global $isInProjectPath, $isInRootDir;
+    if (!is_writable($path)) {
+        return '<input type="button" class="btn btn-danger btn-sm" value="Delete" title="Permission Denied!" disabled="disabled"> ';
+    } else if ($isInProjectPath || ($isInRootDir && $entry == DIR_PROJECT)) {
+        return '<input type="button" class="btn btn-danger btn-sm" value="Delete" title="Not Allowed!" disabled="disabled"> ';
+    }
+    return '<input type="button" class="btn btn-danger btn-sm" ng-click="deleteFileDir($event, ' . $index . ')" value="Delete" title="Delete without confirmation!"> ';
+}
+
+function makeDeleteButtonForFile($path, $entry, $index)
+{
+    global $project_root_files, $isInProjectPath, $isInRootDir;
+    if (!is_writable($path)) {
+        return '<input type="button" class="btn btn-danger btn-sm" value="Delete" title="Permission Denied!" disabled="disabled"> ';
+    } else if ($isInProjectPath || ($isInRootDir && in_array($entry, $project_root_files))) {
+        return '<input type="button" class="btn btn-danger btn-sm" value="Delete" title="Not Allowed!" disabled="disabled"> ';
+    }
+    return '<input type="button" class="btn btn-danger btn-sm" ng-click="deleteFileDir($event, ' . $index . ')" value="Delete" title="Delete without confirmation!"> ';
+}
+
 
 
 getHeader();
 ?>
-
 <!-- Page Content -->
 <div class="container">
-    <div class="row">
+    <div class="row" ng-app="theApp">
         <div class="col-lg-12">
             <h1 class="page-header">Your Host <br><span class="details"><?php print getWebServerDetails(); ?>
             </h1>
             <?php
             showBreadCrumb($directory);
             ?>
+            <div class="file-upload">
+                <ul ng-controller="addNewCtl">
+                    <li ng-click="showUploadBox($event)"><span class="glyphicon glyphicon-upload"></span> Upload</li>
+                    <li ng-click="addNewFile($event)"><span class="glyphicon glyphicon-plus"></span> <span class="m-hidden-xs">New </span>File</li>
+                    <li ng-click="addNewFolder($event)"><span class="glyphicon glyphicon-plus"></span> <span class="m-hidden-xs">New </span>Folder</li>
+                    <li>
+                        <input style="display:none" type="text" ng-model="newfileName" id="newfileName" name="newfileName" placeholder="File/Folder Name">
+                        <input style="display:none" type="button" ng-click="addNewFileFolderHide($event)" class="btn btn-default btn-xs m-hidden-xs" value=" Cancel ">
+                        <input style="display:none" type="button" ng-click="addNewFileFolder($event)" class="btn btn-primary btn-xs" value=" Add ">
+                    </li>
+                </ul>
+                <upload id="filedrop" to="index.php"></upload>
+            </div>
             <div class="table-responsive" style="border: 1px solid #efefef;">
                 <table class="table filestable">
                     <thead>
@@ -143,10 +204,10 @@ getHeader();
                             <th>Size</th>
                             <th>Modified</th>
                             <th>Permissions</th>
-                            <th>Actions</th>
+                            <th style="min-width: 180px;">Actions</th>
                         </tr>
                     </thead>
-                    <tbody ng-app="filesApp" ng-controller="filesCtl">
+                    <tbody ng-controller="filesCtl">
                         <?php
                         if (empty($dirs_list) and empty($files_list)) {
                             print '<tr>
@@ -267,91 +328,9 @@ getHeader();
 </script>
 <script>
     var rootUrl = "<?php print URL_ROOT; ?>";
-    angular.module('filesApp', [])
-        .controller('filesCtl', function($scope, $http, $element, $timeout, $window) {
-            $scope.downloadFile = function(event, id) {
-                var trItem = $element.find('#tr-' + id);
-                var path = trItem.attr("data-href");
-                var file = trItem.attr("data-file");
-                var url = window.location.href;
-                url += (url.search('/?') > 0 ? '&' : '?');
-
-                $window.open(url + "act=download&targetf=" + file, '_blank');
-                $window.focus();
-            }
-            $scope.zipDir = function(event, id) {
-                var zipBtn = angular.element(event.target);
-                zipBtn.html('<span class="spinner-grow spinner-grow-sm" style="margin:0 5px 0 -2px;" role="status" aria-hidden="true"></span> Zipping ...');
-                angular.element(".btn-dirtozip").attr("disabled", true);
-
-
-                var trItem = $element.find('#tr-' + id);
-                var path = trItem.attr("data-href");
-
-                $http({
-                    method: 'POST',
-                    url: "index.php",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    data: {
-                        act: 'zip',
-                        path: path
-                    }
-                }).then(function successCallback(response) {
-                    console.log(response.data);
-                    if (response.data.status === true) {
-                        zipBtn.html('Create Zip File');
-                        angular.element(".btn-dirtozip").attr("disabled", false);
-
-                        $timeout(function() {
-                            $window.location.reload();
-                        }, 250);
-                    } else {
-                        trItem.addClass("dangerHighlight");
-                        $timeout(function() {
-                            trItem.addClass("highlightOut");
-                        }, 1000);
-                    }
-
-                }, function errorCallback(response) {
-
-                });
-            }
-            $scope.deleteFileDir = function(event, id) {
-                var trItem = $element.find('#tr-' + id);
-                var path = trItem.attr("data-href");
-                trItem.removeClass();
-                $http({
-                    method: 'DELETE',
-                    url: "index.php",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    data: {
-                        act: 'del',
-                        path: path
-                    }
-                }).then(function successCallback(response) {
-                    if (response.data.status === true) {
-                        trItem.hide(250);
-                        $timeout(function() {
-                            trItem.remove();
-                        }, 250);
-                    } else {
-                        trItem.addClass("dangerHighlight");
-                        $timeout(function() {
-                            trItem.addClass("highlightOut");
-                        }, 1000);
-                    }
-
-                }, function errorCallback(response) {
-
-                });
-            }
-
-        });
+    var directory = "<?php print $directory; ?>";
 </script>
+<script src="theme/assets/js/app.js"></script>
 <?php
 getFooter();
 ?>
