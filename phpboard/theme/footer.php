@@ -1,7 +1,7 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; <?php print date("Y"); ?>, <a href="https://github.com/myaghobi/xampp-board">XAMPP-Board</a>.</p>
+        <p class="m-0 text-center text-white">Copyright &copy; <?php print date("Y"); ?>, <a href="https://github.com/myaghobi/php-board">PHP-Board</a>.</p>
       </div>
       <!-- /.container -->
     </footer>
