@@ -59,18 +59,19 @@ function showBreadCrumb($address = '') {
 }
 
 function getWebServerDetails() {
-    $str = "PHP" . str_ireplace('php', ' ', PHP_VERSION);
+    $str = $_SERVER["SERVER_SOFTWARE"];
     if (!empty($_SERVER['SERVER_SOFTWARE'])) {
-        $str = $_SERVER["SERVER_SOFTWARE"] . '+' . $str;
+        $str = strpos($str, "PHP")!==false?$str:$str.' '.'PHP/' . PHP_VERSION;
     }
 
-    $exp = explode('+', $str);
+    $str = str_replace('+',' ', $str); // it's space in XAMPP and + in LEMP, so I need to consider both. 
+    $exp = explode(' ', $str);
     $str = '';
     $count = 0;
     foreach ($exp as $item) {
         $str .= makeLabel($item) . ' ';
-        if ($count++ >= 2) {
-            break;
+        if ($count++ >= 3) {
+            break; // SERVER_SOFTWARE sometimes contine some unkown values in lemp
         }
     }
 
