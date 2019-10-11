@@ -1,4 +1,4 @@
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/myaghobi/PHP-Board)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/myaghobi/PHP-Board?include_prereleases)
 ![GitHub repo size](https://img.shields.io/github/repo-size/myaghobi/PHP-Board)
 ![GitHub license (latest by date)](https://img.shields.io/github/license/myaghobi/PHP-Board)
 
