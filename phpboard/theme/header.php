@@ -6,10 +6,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Simple dashboard for XAMPP">
+    <meta name="description" content="Simple dashboard for PHP">
     <meta name="author" content="Mohammad Yaghobi">
 
-    <title>XAMPP Board - <?php print(!empty($title) ? $title : "Simple Dashboard for XAMPP"); ?></title>
+    <title>PHP-Board - <?php print(!empty($title) ? $title : "Simple Dashboard for PHP"); ?></title>
 
     <!-- Bootstrap Core CSS -->
     <link href="theme/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -52,7 +52,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">XAMPP Board <sup><?php print $sys_vesrion; ?></sup></a>
+                <a class="navbar-brand" href="#">PHP-Board <sup><?php print $sys_vesrion; ?></sup></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
