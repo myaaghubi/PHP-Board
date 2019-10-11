@@ -2,7 +2,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/myaghobi/PHP-Board)
 ![GitHub license (latest by date)](https://img.shields.io/github/license/myaghobi/PHP-Board)
 
-# XAMPP Board 0.4.7
+# PHP-Board 0.4.7
 A php dashboard for developers.
 
 Usage
