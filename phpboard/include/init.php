@@ -8,7 +8,7 @@ ini_set('display_startup_errors', '1');
 // UTF-8 is necessary for basename()
 setlocale(LC_ALL, 'UTF-8');
 
-$sys_vesrion = "0.4.7";
+$sys_vesrion = "0.4.9";
 
 define('URL_ROOT',  rtrim($_SERVER['HTTP_HOST']).'/');
 define('URL_PROJECT',  URL_ROOT.trimURL($_SERVER['REQUEST_URI']).DIRECTORY_SEPARATOR);

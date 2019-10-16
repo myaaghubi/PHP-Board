@@ -153,7 +153,6 @@ theApp.controller('addNewCtl', function($scope, $http, $element, $timeout, $wind
                     name: $scope.cdata.name
                 }
             }).then(function successCallback(response) {
-                console.log(response.data);
                 if (response.data.status === true) {
                     $window.location.reload();
                 } else {

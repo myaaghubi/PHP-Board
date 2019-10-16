@@ -145,7 +145,7 @@ function getPermDescription($path)
         $desc[] = 'write';
     if (is_executable($path))
         $desc[] = 'exec';
-    return implode('+', $desc);
+    return decoct(fileperms($path) & 0777).'<br>'.implode('+', $desc);
 }
 
 function makeDeleteButtonForDir($path, $entry, $index)

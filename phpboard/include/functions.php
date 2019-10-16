@@ -31,7 +31,7 @@ function getFooter($title = "", $jsList = "") {
 }
 
 function showLabel($msg = "", $type = "default") {
-    print '<span class="label label-' . $type . '">' . $msg . '</span>';
+    print makeLabel($msg, $type);
 }
 
 function makeLabel($msg = "", $type = "default") {
@@ -53,6 +53,9 @@ function showBreadCrumb($address = '') {
         $dir .= $item;
         $str .= '<li><a href="http://' . URL_PROJECT . '?d=' . $dir . '">' . $item . '</a></li> ';
     }
+    
+    $str .= ' '.(is_writable(PATH_ROOT.$address)?makeLabel("Writable", "success"):makeLabel("Not-Writable", "danger"));
+
     $str .= '</ul>';
 
     print $str;
@@ -64,7 +67,7 @@ function getWebServerDetails() {
         $str = strpos($str, "PHP")!==false?$str:$str.' '.'PHP/' . PHP_VERSION;
     }
 
-    $str = str_replace('+',' ', $str); // it's space in XAMPP and + in LEMP, so I need to consider both. 
+    $str = str_replace(array('+', '~'),' ', $str); // it's space in XAMPP and +/~ in LEMP, so I need to consider all. 
     $exp = explode(' ', $str);
     $str = '';
     $count = 0;
