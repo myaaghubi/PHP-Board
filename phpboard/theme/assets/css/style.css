@@ -1,23 +1,15 @@
 /*!
- * 
- * 
- * 
+ *
+ *
+ *
  */
 
 body {
     padding-top: 70px;
 }
 
-.margin-b {
-    margin-bottom: 30px;
-}
-
 footer {
-    margin: 50px 0;
-}
-
-.navbar-inverse {
-    background-color: #37474f
+    margin-top: 200px;
 }
 
 .webs,
@@ -49,8 +41,6 @@ footer {
     width: 30px;
     height: 30px;
 }
-
-.webs img {}
 
 #websContextMenu,
 #filesContextMenu {
@@ -86,19 +76,19 @@ footer {
 }
 
 @media screen and (min-width: 1200px) {
-    .col-md-2 a img {
+    .col--2 a img {
         padding: 7px 17px 3px 17px;
     }
 }
 
 @media screen and (max-width: 1199px) {
-    .col-md-2 a img {
+    .col--2 a img {
         padding: 5px 15px 3px 15px;
     }
 }
 
 @media screen and (max-width: 991px) {
-    .col-md-2 a img {
+    .col--2 a img {
         padding: 5px 15px 3px 15px;
     }
 }
@@ -107,13 +97,14 @@ footer {
     .page-header {
         margin-top: 0;
     }
+
     footer {
         margin: 0;
     }
 }
 
 @media screen and (max-width: 700px) {
-    .col-md-2 a img {
+    .col--2 a img {
         padding: 0px;
     }
 }
@@ -122,6 +113,7 @@ footer {
     .col-xxs-3 {
         width: 25%;
     }
+
     .col-xxs-4 {
         width: 33.33333333%;
     }
@@ -131,6 +123,7 @@ footer {
     .col-xxxs-6 {
         width: 50%;
     }
+
     .webs,
     .files {
         font-size: 11px;
@@ -141,6 +134,7 @@ footer {
     0% {
         transform: scale(0);
     }
+
     50% {
         opacity: 1;
     }
@@ -159,8 +153,8 @@ footer {
 }
 
 .spinner-hidden {
-    width: 0rem!important;
-    height: 0rem!important;
+    width: 0rem !important;
+    height: 0rem !important;
 }
 
 .spinner-grow-sm {
@@ -168,12 +162,9 @@ footer {
     height: 1.5rem;
 }
 
-
-
-/* ---------------------------- */
 img.dir {
-    width:50px;
-    height:auto;
+    width: 50px;
+    height: auto;
     overflow: hidden;
 }
 
@@ -186,12 +177,8 @@ img.dir {
     transition: background-color 1000ms linear;
 }
 
-.filestable td {
-    vertical-align: middle!important;
-}
-
-button.btn-dirtozip {
-    width: 101px;
+.table td {
+    vertical-align: middle !important;
 }
 
 #filedrop {
@@ -217,77 +204,19 @@ button.btn-dirtozip {
     margin-bottom: 5px;
 }
 
-.file-upload ul {
-    list-style: none;
-    height: 23px;
-    padding-left: 0px;
-    margin-bottom: 5px;
-    word-wrap: inherit;
-    overflow: hidden;
+.breadcrumb>li+li:before {
+    padding-left: 5px;
+    color: #ccc;
+    content: "/\00a0";
 }
 
-.file-upload ul > li {
-    display: inline-block;
-    padding-right:0px;
-    font-size: 12px;
-    user-select: none;
-    
+.breadcrumb .badge {
+    margin-left: 5px;
 }
 
-.file-upload ul > li > input[name='newfileName'] {
-    border:1px solid #cfcfcf;
+.file-upload ul>li>input[name='newfileName'] {
+    border: 1px solid #cfcfcf;
     padding: 2px 3px 1px 3px;
     border-radius: 3px;
     width: calc(100% - 92px);
-}
-
-.file-upload ul > li > button {
-    padding: 1px 10px  0 10px;
-}
-
-.file-upload ul > li > input[type=button] {
-    margin-top:-1px;
-    user-select: none;
-}
-
-.file-upload ul > li:not(:last-child) {
-    cursor: pointer;
-    border:1px solid #cfcfcf;
-    padding: 2px 5px 1px 5px;
-    border-radius: 3px;
-}
-
-.file-upload ul > li.active:not(:last-child) {
-    background-color:#337ab7;
-    border-color:#122b40;
-    color:#fff;
-}
-
-.file-upload ul > li:last-child {
-    width: calc(100% - 241px);
-}
-
-.m-hidden-xs {
-
-}
-@media (max-width: 576px)  {
-    .file-upload ul > li:last-child {
-        width: calc(100% - 186px);
-    }
-
-    .file-upload ul > li > input[name='newfileName'] {
-        width: calc(100% - 38px);
-    }
-
-    .m-hidden-xs {
-        display: none!important;
-    }
-}
-
-
-.file-upload ul > li img {
-    width:10px;
-    margin-right:3px;
-    opacity:0.7;
-    vertical-align: baseline;
 }
