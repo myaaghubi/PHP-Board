@@ -37,41 +37,31 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="theme/assets/js/bootstrap.min.js"></script>
-
 </head>
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">PHP-Board <sup><?php print $sys_vesrion; ?></sup></a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="/">Files</a>
+            <a class="navbar-brand" href="#">PHP-Board <sup><?php print $sys_vesrion; ?></sup></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Files</a>
                     </li>
-                    <li>
-                        <a href="config.php">Config</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="config.php">Config</a>
                     </li>
-                    <li>
-                        <a href="/phpmyadmin">PHPMyAdmin</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/phpmyadmin">PHPMyAdmin</a>
                     </li>
-                    <li>
-                        <a href="phpinfo.php">PHPInfo</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="phpinfo.php">PHPInfo</a>
                     </li>
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.container -->
     </nav>

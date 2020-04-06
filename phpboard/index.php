@@ -26,20 +26,22 @@ if (!empty($pData)) {
         $name = $pData->name ?? '';
         if (empty($name)) {
             ajaxDone(false, "File name is empty!");
-        } if (file_exists(PATH_ROOT . $directory .$name)) {
+        }
+        if (file_exists(PATH_ROOT . $directory . $name)) {
             ajaxDone(false, "Duplicated file name!");
         } else {
-            ajaxDone(fopen(PATH_ROOT . $directory .$name, "w")!==false);
+            ajaxDone(fopen(PATH_ROOT . $directory . $name, "w") !== false);
         }
     } else if ($act == 'addFolder') {
         $directory = $pData->dir ?? '';
         $name = $pData->name ?? '';
         if (empty($name)) {
             ajaxDone(false, "Folder name is empty!");
-        } if (file_exists(PATH_ROOT . $directory .$name)) {
+        }
+        if (file_exists(PATH_ROOT . $directory . $name)) {
             ajaxDone(false, "Duplicated folder name!");
         } else {
-            ajaxDone(mkdir(PATH_ROOT . $directory .$name, 0777, true), "w");
+            ajaxDone(mkdir(PATH_ROOT . $directory . $name, 0777, true), "w");
         }
     }
 
@@ -104,14 +106,14 @@ if ($files = array_diff(scandir(PATH_ROOT . $directory), ['.', '..'])) {
                 $dirs_list .= '
                 <tr id="tr-' . $index . '" data-href="' . $directory . $entry . '">
                     <td>
-                        <img class="dir" src="theme/assets/images/folder.png"> 
-                        <a href="http://' . URL_PROJECT . '?d=' . $directory . $entry . '" data-href="' . $entry . '"> ' . $entry . ' </a> 
+                        <img class="dir" src="theme/assets/images/folder.png">
+                        <a href="http://' . URL_PROJECT . '?d=' . $directory . $entry . '" data-href="' . $entry . '"> ' . $entry . ' </a>
                     </td>
                     <td> --- </td>
                     <td>' . date('M d, Y H:i', $stat['mtime']) . '</td>
                     <td>' . getPermDescription($path) . '</td>
                     <td>'
-                    . (true ? '<button type="button" class="btn btn-default btn-sm btn-dirtozip" ng-click="zipDir($event, ' . $index . ')">Create Zip File</button> ' : ' ')
+                    . (true ? '<button type="button" class="btn btn-outline-secondary btn-sm btn-dirtozip" ng-click="zipDir($event, ' . $index . ')">Create Zip File</button> ' : ' ')
                     . makeDeleteButtonForDir($path, $entry, $index) .
                     '</td>
 				</tr>';
@@ -120,13 +122,13 @@ if ($files = array_diff(scandir(PATH_ROOT . $directory), ['.', '..'])) {
                 <tr id="tr-' . $index . '" data-href="' . $directory . $entry . '" data-file="' . $entry . '">
                     <td>
                         <img class="file" src="theme/assets/images/file.png">
-                        <a href="http://' . URL_ROOT . $directory . $entry . '" data-href="' . $entry . '"> ' . $entry . ' </a> 
+                        <a href="http://' . URL_ROOT . $directory . $entry . '" data-href="' . $entry . '"> ' . $entry . ' </a>
                     </td>
                     <td>' . getFileSizeFormatted($stat['size']) . '</td>
                     <td>' . date('M d, Y H:i', $stat['mtime']) . '</td>
                     <td>' . getPermDescription($path) . '</td>
                     <td>'
-                    . (true ? '<input type="button" class="btn btn-default btn-sm" ng-click="downloadFile($event, ' . $index . ')" value="Download"> ' : ' ')
+                    . (true ? '<input type="button" class="btn btn-outline-secondary btn-sm" ng-click="downloadFile($event, ' . $index . ')" value="Download"> ' : ' ')
                     . makeDeleteButtonForFile($path, $entry, $index) .
                     '</td>
                 </tr>';
@@ -145,7 +147,7 @@ function getPermDescription($path)
         $desc[] = 'write';
     if (is_executable($path))
         $desc[] = 'exec';
-    return decoct(fileperms($path) & 0777).'<br>'.implode('+', $desc);
+    return decoct(fileperms($path) & 0777) . '<br>' . implode('+', $desc);
 }
 
 function makeDeleteButtonForDir($path, $entry, $index)
@@ -170,8 +172,6 @@ function makeDeleteButtonForFile($path, $entry, $index)
     return '<input type="button" class="btn btn-danger btn-sm" ng-click="deleteFileDir($event, ' . $index . ')" value="Delete" title="Delete without confirmation!"> ';
 }
 
-
-
 getHeader();
 ?>
 <!-- Page Content -->
@@ -184,21 +184,27 @@ getHeader();
             showBreadCrumb($directory);
             ?>
             <div class="file-upload">
-                <ul ng-controller="addNewCtl">
-                    <li ng-click="showUploadBox($event)"><span class="glyphicon glyphicon-upload"></span> Upload</li>
-                    <li ng-click="addNewFile($event)"><span class="glyphicon glyphicon-plus"></span> <span class="m-hidden-xs">New </span>File</li>
-                    <li ng-click="addNewFolder($event)"><span class="glyphicon glyphicon-plus"></span> <span class="m-hidden-xs">New </span>Folder</li>
-                    <li>
-                        <input style="display:none" type="text" ng-model="newfileName" id="newfileName" name="newfileName" placeholder="File/Folder Name">
-                        <input style="display:none" type="button" ng-click="addNewFileFolderHide($event)" class="btn btn-default btn-xs m-hidden-xs" value=" Cancel ">
-                        <input style="display:none" type="button" ng-click="addNewFileFolder($event)" class="btn btn-primary btn-xs" value=" Add ">
-                    </li>
+                <ul class="row p-0 my-1" ng-controller="addNewCtl">
+                    <div class="col col-auto pr-0">
+                        <li type="button" class="btn btn-outline-primary btn-sm" ng-click="showUploadBox($event)">Upload</li>
+                    </div>
+                    <div class="col col-auto pr-0 btn-group">
+                        <button type="button" id="btn-newFile" class="btn btn-outline-primary btn-sm" ng-click="addNewFile($event)">New File</button>
+                        <button type="button" id="btn-newFolder" class="btn btn-outline-primary btn-sm" ng-click="addNewFolder($event)">New Folder</button>
+                    </div>
+                    <div id="upload-group" class="col input-group input-group-sm" style="display:none">
+                        <input type="text" ng-model="newfileName" id="newfileName" class="form-control" name="newfileName" placeholder="File/Folder Name">
+                        <div class="input-group-append">
+                            <button class="input-group-text btn btn-danger" type="button" ng-click="addNewFileFolderHide($event)">Cancel</button>
+                            <button class="input-group-text btn btn-success" type="button" ng-click="addNewFileFolder($event)">Add</button>
+                        </div>
+                    </div>
                 </ul>
                 <upload id="filedrop" to="index.php"></upload>
             </div>
             <div class="table-responsive" style="border: 1px solid #efefef;">
-                <table class="table filestable">
-                    <thead>
+                <table class="table table-hover">
+                    <thead class="thead-light">
                         <tr>
                             <th>Name</th>
                             <th>Size</th>
@@ -213,7 +219,7 @@ getHeader();
                             print '<tr>
                                     <td colspan="5" style="text-align: center;
                                     padding: 50px;">Directory is empty!</td>
-                                   <tr>';
+                                    <tr>';
                         } else {
                             print $dirs_list . $files_list;
                         }

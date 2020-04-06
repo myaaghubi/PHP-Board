@@ -93,39 +93,42 @@ theApp.controller('addNewCtl', function($scope, $http, $element, $timeout, $wind
             btn.addClass("active");
             uploadBox.show(250);
         }
-    }        
+    }
+
     $scope.addNewFile = function(event, id) {
         var btn = angular.element(event.target);
 
         var input = $element.find('#newfileName');
         if (btn.hasClass('active')) {
-            btn.parent().find("li").not(':first').removeClass();
-            input.parent().find('input').hide(250);
+            btn.removeClass("active btn-primary").addClass("btn-outline-primary");
+            $element.find('#upload-group').hide(250);
         } else {
-            btn.parent().find("li").not(':first').removeClass();
-            btn.addClass("active");
-            input.parent().find('input').show(250);
+            $element.find('#btn-newFolder').removeClass("active btn-primary btn-outline-primary").addClass("btn-outline-primary");
+            btn.removeClass("active btn-primary btn-outline-primary").addClass("active btn btn-primary");
+            $element.find('#upload-group').show(250);
         }
         input.attr('placeholder', 'File Name');
-        
+
         addNewFileStatus = true;
     }
+
     $scope.addNewFolder = function(event, id) {
         var btn = angular.element(event.target);
 
         var input = $element.find('#newfileName');
         if (btn.hasClass('active')) {
-            btn.parent().find("li").not(':first').removeClass();
-            input.parent().find('input').hide(250);
+            btn.removeClass("active btn-primary").addClass("btn-outline-primary");
+            $element.find('#upload-group').hide(250);
         } else {
-            btn.parent().find("li").not(':first').removeClass();
-            btn.addClass("active");
-            input.parent().find('input').show(250);
+            $element.find('#btn-newFile').removeClass("active btn-primary btn-outline-primary").addClass("btn-outline-primary");
+            btn.removeClass("active btn-primary btn-outline-primary").addClass("active btn btn-primary");
+            $element.find('#upload-group').show(250);
         }
         input.attr('placeholder', 'Folder Name');
 
         addNewFileStatus = false;
     }
+
     $scope.addNewFileFolder = function(event, id) {
         var input = $element.find('#newfileName');
         $scope.cdata = {};
@@ -133,7 +136,7 @@ theApp.controller('addNewCtl', function($scope, $http, $element, $timeout, $wind
         if (!addNewFileStatus) {
             $scope.cdata.action = 'addFolder';
         }
-        
+
         $scope.cdata.name = input.val();
         if ($scope.cdata.name.length <= 0) {
             input.addClass("dangerHighlight");
@@ -169,10 +172,11 @@ theApp.controller('addNewCtl', function($scope, $http, $element, $timeout, $wind
             });
         }
     }
+
     $scope.addNewFileFolderHide = function(event, id) {
         var btn = angular.element(event.target);
-        btn.parent().parent().find("li").not(':first').removeClass();
-        btn.parent().find("input").hide(250);
+        btn.parent().parent().find("li").not(':first').removeClass("active btn-outline-primary btn-primary").addClass('btn-outline-primary');
+        $element.find('#upload-group').hide(250);
     }
 
 });
